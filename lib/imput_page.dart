@@ -31,7 +31,7 @@ class _ImputPageState extends State<ImputPage> {
 class ReusableCard extends StatelessWidget {
   final Color color;
 
-  ReusableCard({this.color});
+  ReusableCard({@required this.color});
 
   @override
   Widget build(BuildContext context) {
