@@ -6,9 +6,13 @@ import './reusable_card.dart';
 
 const bottomContainerHeight = 80.0;
 const bottomContainerColor = Color(0xFFEB1555);
-
 const containerColorInactive = Color(0xFF111328);
 const containerColorActive = Color(0xFF1D1E33);
+
+enum Gender {
+  male,
+  female,
+}
 
 class ImputPage extends StatefulWidget {
   @override
@@ -19,15 +23,15 @@ class _ImputPageState extends State<ImputPage> {
   Color maleContainerColor = containerColorInactive;
   Color femaleContainerColor = containerColorInactive;
 
-  void updateColor(int gender) {
-    if (gender == 1) {
+  void updateColor(Gender gender) {
+    if (gender == Gender.male) {
       if (maleContainerColor == containerColorInactive) {
         maleContainerColor = containerColorActive;
         femaleContainerColor = containerColorInactive;
       } else {
         maleContainerColor = containerColorInactive;
       }
-    } else if (gender == 2) {
+    } else if (gender == Gender.female) {
       if (femaleContainerColor == containerColorInactive) {
         femaleContainerColor = containerColorActive;
         maleContainerColor = containerColorInactive;
@@ -53,7 +57,7 @@ class _ImputPageState extends State<ImputPage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          updateColor(1);
+                          updateColor(Gender.male);
                         });
                       },
                       child: ReusableCard(
@@ -69,7 +73,7 @@ class _ImputPageState extends State<ImputPage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          updateColor(2);
+                          updateColor(Gender.female);
                         });
                       },
                       child: ReusableCard(
