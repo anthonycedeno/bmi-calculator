@@ -6,7 +6,9 @@ import './reusable_card.dart';
 
 const bottomContainerHeight = 80.0;
 const bottomContainerColor = Color(0xFFEB1555);
-const containerColor = Color(0xFF1D1E33);
+
+const containerColorInactive = Color(0xFF111328);
+const containerColorActive = Color(0xFF1D1E33);
 
 class ImputPage extends StatefulWidget {
   @override
@@ -14,6 +16,27 @@ class ImputPage extends StatefulWidget {
 }
 
 class _ImputPageState extends State<ImputPage> {
+  Color maleContainerColor = containerColorInactive;
+  Color femaleContainerColor = containerColorInactive;
+
+  void updateColor(int gender) {
+    if (gender == 1) {
+      if (maleContainerColor == containerColorInactive) {
+        maleContainerColor = containerColorActive;
+        femaleContainerColor = containerColorInactive;
+      } else {
+        maleContainerColor = containerColorInactive;
+      }
+    } else if (gender == 2) {
+      if (femaleContainerColor == containerColorInactive) {
+        femaleContainerColor = containerColorActive;
+        maleContainerColor = containerColorInactive;
+      } else {
+        femaleContainerColor = containerColorInactive;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,15 +50,33 @@ class _ImputPageState extends State<ImputPage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: ReusableCard(
-                      color: containerColor,
-                      cardChild: IconAndText(icon: FontAwesomeIcons.mars, label: 'MALE',),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          updateColor(1);
+                        });
+                      },
+                      child: ReusableCard(
+                        color: maleContainerColor,
+                        cardChild: IconAndText(
+                          icon: FontAwesomeIcons.mars,
+                          label: 'MALE',
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: ReusableCard(
-                      color: containerColor,
-                      cardChild: IconAndText(icon: FontAwesomeIcons.venus, label: 'FEMALE' ),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          updateColor(2);
+                        });
+                      },
+                      child: ReusableCard(
+                        color: femaleContainerColor,
+                        cardChild: IconAndText(
+                            icon: FontAwesomeIcons.venus, label: 'FEMALE'),
+                      ),
                     ),
                   ),
                 ],
@@ -43,7 +84,7 @@ class _ImputPageState extends State<ImputPage> {
             ),
             Expanded(
               child: ReusableCard(
-                color: containerColor,
+                color: containerColorActive,
               ),
             ),
             Expanded(
@@ -51,12 +92,12 @@ class _ImputPageState extends State<ImputPage> {
                 children: [
                   Expanded(
                     child: ReusableCard(
-                      color: containerColor,
+                      color: containerColorActive,
                     ),
                   ),
                   Expanded(
                     child: ReusableCard(
-                      color: containerColor,
+                      color: containerColorActive,
                     ),
                   ),
                 ],
