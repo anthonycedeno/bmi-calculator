@@ -3,11 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import './icon_and_text.dart';
 import './reusable_card.dart';
-
-const bottomContainerHeight = 80.0;
-const bottomContainerColor = Color(0xFFEB1555);
-const containerColorInactive = Color(0xFF111328);
-const containerColorActive = Color(0xFF1D1E33);
+import './constants.dart';
 
 enum Gender {
   male,
@@ -20,26 +16,8 @@ class ImputPage extends StatefulWidget {
 }
 
 class _ImputPageState extends State<ImputPage> {
-  Color maleContainerColor = containerColorInactive;
-  Color femaleContainerColor = containerColorInactive;
-
-  void updateColor(Gender gender) {
-    if (gender == Gender.male) {
-      if (maleContainerColor == containerColorInactive) {
-        maleContainerColor = containerColorActive;
-        femaleContainerColor = containerColorInactive;
-      } else {
-        maleContainerColor = containerColorInactive;
-      }
-    } else if (gender == Gender.female) {
-      if (femaleContainerColor == containerColorInactive) {
-        femaleContainerColor = containerColorActive;
-        maleContainerColor = containerColorInactive;
-      } else {
-        femaleContainerColor = containerColorInactive;
-      }
-    }
-  }
+  Gender gender;
+  int height = 180;
 
   @override
   Widget build(BuildContext context) {
@@ -49,37 +27,40 @@ class _ImputPageState extends State<ImputPage> {
           title: Text('BMI CALCULATOR'),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: Row(
                 children: [
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () {
+                    child: ReusableCard(
+                      onPress: () {
                         setState(() {
-                          updateColor(Gender.male);
+                          gender = Gender.male;
                         });
                       },
-                      child: ReusableCard(
-                        color: maleContainerColor,
-                        cardChild: IconAndText(
-                          icon: FontAwesomeIcons.mars,
-                          label: 'MALE',
-                        ),
+                      color: gender == Gender.male
+                          ? kContainerColorActive
+                          : kContainerColorInactive,
+                      cardChild: IconAndText(
+                        icon: FontAwesomeIcons.mars,
+                        label: 'MALE',
                       ),
                     ),
                   ),
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () {
+                    child: ReusableCard(
+                      onPress: () {
                         setState(() {
-                          updateColor(Gender.female);
+                          gender = Gender.female;
                         });
                       },
-                      child: ReusableCard(
-                        color: femaleContainerColor,
-                        cardChild: IconAndText(
-                            icon: FontAwesomeIcons.venus, label: 'FEMALE'),
+                      color: gender == Gender.female
+                          ? kContainerColorActive
+                          : kContainerColorInactive,
+                      cardChild: IconAndText(
+                        icon: FontAwesomeIcons.venus,
+                        label: 'FEMALE',
                       ),
                     ),
                   ),
@@ -88,7 +69,53 @@ class _ImputPageState extends State<ImputPage> {
             ),
             Expanded(
               child: ReusableCard(
-                color: containerColorActive,
+                color: kContainerColorActive,
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'HEIGHT',
+                      style: kLabelTextStyle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          height.toString(),
+                          style: kNumberTextStyle,
+                        ),
+                        Text(
+                          'cm',
+                          style: kLabelTextStyle,
+                        ),
+                      ],
+                    ),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        inactiveTrackColor: Color(0xFF8D8E98),
+                        activeTrackColor: Colors.white,
+                        thumbColor: Color(0xFFEB1555),
+                        overlayColor: Color(0x29EB1555),
+                        thumbShape:
+                            RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                        overlayShape:
+                            RoundSliderOverlayShape(overlayRadius: 30.0),
+                      ),
+                      child: Slider(
+                        value: height.toDouble(),
+                        min: 120.0,
+                        max: 220.0,
+                        onChanged: (double newValue) {
+                          setState(() {
+                            height = newValue.round();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -96,22 +123,22 @@ class _ImputPageState extends State<ImputPage> {
                 children: [
                   Expanded(
                     child: ReusableCard(
-                      color: containerColorActive,
+                      color: kContainerColorActive,
                     ),
                   ),
                   Expanded(
                     child: ReusableCard(
-                      color: containerColorActive,
+                      color: kContainerColorActive,
                     ),
                   ),
                 ],
               ),
             ),
             Container(
-              color: bottomContainerColor,
+              color: kBottomContainerColor,
               margin: EdgeInsets.only(top: 10.0),
               width: double.infinity,
-              height: bottomContainerHeight,
+              height: kBottomContainerHeight,
             )
           ],
         ));
